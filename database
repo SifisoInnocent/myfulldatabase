@@ -1,0 +1,46 @@
+-- Library Management System Database
+-- answers.sql
+
+-- 1. Create the database
+CREATE DATABASE LibraryDB;
+USE LibraryDB;
+
+-- 2. Create tables
+
+-- Table: Members
+CREATE TABLE Members (
+    memberID INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(20)
+);
+
+-- Table: Books
+CREATE TABLE Books (
+    bookID INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    isbn VARCHAR(20) UNIQUE NOT NULL,
+    publishedYear INT
+);
+
+-- Table: BorrowRecords
+CREATE TABLE BorrowRecords (
+    borrowID INT AUTO_INCREMENT PRIMARY KEY,
+    memberID INT NOT NULL,
+    bookID INT NOT NULL,
+    borrowDate DATE NOT NULL,
+    returnDate DATE,
+    FOREIGN KEY (memberID) REFERENCES Members(memberID),
+    FOREIGN KEY (bookID) REFERENCES Books(bookID),
+    UNIQUE(memberID, bookID, borrowDate) -- prevents duplicate borrowing on same day
+);
+
+-- Optional: Many-to-Many example if you want multiple authors per book
+CREATE TABLE BookAuthors (
+    bookID INT,
+    authorID INT,
+    PRIMARY KEY (bookID, authorID)
+    -- you would have an Authors table too if needed
+);
